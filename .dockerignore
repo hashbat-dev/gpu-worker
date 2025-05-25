@@ -1,0 +1,11 @@
+target/
+.git/
+.gitignore
+README.md
+test.sh
+test_files/
+*.log
+.env
+.DS_Store
+Dockerfile
+.dockerignore

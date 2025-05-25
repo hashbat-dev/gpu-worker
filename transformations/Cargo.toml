@@ -1,0 +1,18 @@
+[package]
+name = "transformations"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wgpu = "0.19"
+bytemuck = { version = "1.13", features = ["derive"] }
+image = "0.24"
+tokio = { version = "1.28", features = ["full"] }
+futures-channel = "0.3"
+log = "0.4"
+anyhow = "1.0"
+thiserror = "1.0"
+
+[lib]
+name = "transformations"
+path = "src/lib.rs"

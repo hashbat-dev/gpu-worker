@@ -1,0 +1,13 @@
+/Users/sam/Documents/GitHub/gpu-worker/target/debug/deps/libhalf-e90ea0fc95afa0bc.rmeta: /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/lib.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/bfloat.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/bfloat/convert.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/binary16.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/binary16/arch.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/binary16/arch/x86.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/leading_zeros.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/slice.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/vec.rs
+
+/Users/sam/Documents/GitHub/gpu-worker/target/debug/deps/half-e90ea0fc95afa0bc.d: /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/lib.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/bfloat.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/bfloat/convert.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/binary16.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/binary16/arch.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/binary16/arch/x86.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/leading_zeros.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/slice.rs /Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/vec.rs
+
+/Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/lib.rs:
+/Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/bfloat.rs:
+/Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/bfloat/convert.rs:
+/Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/binary16.rs:
+/Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/binary16/arch.rs:
+/Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/binary16/arch/x86.rs:
+/Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/leading_zeros.rs:
+/Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/slice.rs:
+/Users/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/half-2.6.0/src/vec.rs:
