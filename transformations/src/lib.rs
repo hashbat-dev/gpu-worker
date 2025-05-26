@@ -1,9 +1,9 @@
 pub mod blur;
-pub mod mirror;
 pub mod error;
 pub mod gpu;
+pub mod mirror;
 
 pub use blur::BlurProcessor;
-pub use mirror::MirrorProcessor;
-pub use error::{TransformationError, Result};
+pub use error::{Result, TransformationError};
 pub use gpu::GpuProcessor;
+pub use mirror::MirrorProcessor;

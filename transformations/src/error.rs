@@ -4,19 +4,19 @@ use thiserror::Error;
 pub enum TransformationError {
     #[error("GPU error: {0}")]
     GpuError(String),
-    
+
     #[error("Image error: {0}")]
     ImageError(#[from] image::ImageError),
-    
+
     #[error("IO error: {0}")]
     IoError(#[from] std::io::Error),
-    
+
     #[error("Invalid input: {0}")]
     InvalidInput(String),
-    
+
     #[error("Processing error: {0}")]
     ProcessingError(String),
-    
+
     #[error("Buffer error: {0}")]
     BufferError(String),
 }

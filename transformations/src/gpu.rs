@@ -1,6 +1,6 @@
-use wgpu::util::DeviceExt;
-use crate::error::{TransformationError, Result};
+use crate::error::{Result, TransformationError};
 use bytemuck::{Pod, Zeroable};
+use wgpu::util::DeviceExt;
 
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
@@ -10,10 +10,22 @@ pub struct Vertex {
 }
 
 pub const VERTICES: &[Vertex] = &[
-    Vertex { position: [-1.0, -1.0], tex_coords: [0.0, 1.0] },
-    Vertex { position: [1.0, -1.0], tex_coords: [1.0, 1.0] },
-    Vertex { position: [1.0, 1.0], tex_coords: [1.0, 0.0] },
-    Vertex { position: [-1.0, 1.0], tex_coords: [0.0, 0.0] },
+    Vertex {
+        position: [-1.0, -1.0],
+        tex_coords: [0.0, 1.0],
+    },
+    Vertex {
+        position: [1.0, -1.0],
+        tex_coords: [1.0, 1.0],
+    },
+    Vertex {
+        position: [1.0, 1.0],
+        tex_coords: [1.0, 0.0],
+    },
+    Vertex {
+        position: [-1.0, 1.0],
+        tex_coords: [0.0, 0.0],
+    },
 ];
 
 pub const INDICES: &[u16] = &[0, 1, 2, 2, 3, 0];
@@ -39,7 +51,9 @@ impl GpuProcessor {
                 force_fallback_adapter: false,
             })
             .await
-            .ok_or_else(|| TransformationError::GpuError("Failed to find an appropriate adapter".to_string()))?;
+            .ok_or_else(|| {
+                TransformationError::GpuError("Failed to find an appropriate adapter".to_string())
+            })?;
 
         let (device, queue) = adapter
             .request_device(
@@ -55,7 +69,13 @@ impl GpuProcessor {
         Ok(Self { device, queue })
     }
 
-    pub fn create_texture(&self, width: u32, height: u32, usage: wgpu::TextureUsages, label: &str) -> wgpu::Texture {
+    pub fn create_texture(
+        &self,
+        width: u32,
+        height: u32,
+        usage: wgpu::TextureUsages,
+        label: &str,
+    ) -> wgpu::Texture {
         self.device.create_texture(&wgpu::TextureDescriptor {
             label: Some(label),
             size: wgpu::Extent3d {
@@ -72,12 +92,18 @@ impl GpuProcessor {
         })
     }
 
-    pub fn create_buffer_init(&self, contents: &[u8], usage: wgpu::BufferUsages, label: &str) -> wgpu::Buffer {
-        self.device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some(label),
-            contents,
-            usage,
-        })
+    pub fn create_buffer_init(
+        &self,
+        contents: &[u8],
+        usage: wgpu::BufferUsages,
+        label: &str,
+    ) -> wgpu::Buffer {
+        self.device
+            .create_buffer_init(&wgpu::util::BufferInitDescriptor {
+                label: Some(label),
+                contents,
+                usage,
+            })
     }
 
     pub fn create_vertex_buffer(&self) -> wgpu::Buffer {
@@ -111,21 +137,27 @@ impl GpuProcessor {
     pub async fn read_buffer(&self, buffer: &wgpu::Buffer, _size: u64) -> Result<Vec<u8>> {
         let buffer_slice = buffer.slice(..);
         let (tx, rx) = tokio::sync::oneshot::channel();
-        
+
         buffer_slice.map_async(wgpu::MapMode::Read, move |result| {
             let _ = tx.send(result);
         });
-        
+
         self.device.poll(wgpu::Maintain::Wait);
-        
+
         rx.await
-            .map_err(|_| TransformationError::BufferError("Failed to receive buffer mapping result".to_string()))?
-            .map_err(|e| TransformationError::BufferError(format!("Failed to map buffer: {:?}", e)))?;
-        
+            .map_err(|_| {
+                TransformationError::BufferError(
+                    "Failed to receive buffer mapping result".to_string(),
+                )
+            })?
+            .map_err(|e| {
+                TransformationError::BufferError(format!("Failed to map buffer: {:?}", e))
+            })?;
+
         let data = buffer_slice.get_mapped_range().to_vec();
         let _ = buffer_slice;
         buffer.unmap();
-        
+
         Ok(data)
     }
 
@@ -135,9 +167,15 @@ impl GpuProcessor {
         (unpadded_bytes_per_row + align - 1) / align * align
     }
 
-    pub fn remove_padding(&self, data: &[u8], width: u32, height: u32, padded_bytes_per_row: u32) -> Vec<u8> {
+    pub fn remove_padding(
+        &self,
+        data: &[u8],
+        width: u32,
+        height: u32,
+        padded_bytes_per_row: u32,
+    ) -> Vec<u8> {
         let unpadded_bytes_per_row = 4 * width;
-        
+
         if padded_bytes_per_row == unpadded_bytes_per_row {
             data.to_vec()
         } else {

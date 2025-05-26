@@ -1,10 +1,10 @@
-use actix_web::{web, HttpResponse};
+use crate::error::{GpuWorkerError, Result};
 use actix_multipart::Multipart;
+use actix_web::{web, HttpResponse};
 use futures_util::TryStreamExt;
-use gif::{Frame, Encoder, Repeat};
+use gif::{Encoder, Frame, Repeat};
 use std::io::Cursor;
 use transformations::MirrorProcessor;
-use crate::error::{GpuWorkerError, Result};
 
 /// Handles the mirror GIF endpoint
 ///
@@ -33,18 +33,25 @@ async fn extract_gif_from_multipart(mut payload: Multipart) -> Result<Vec<u8>> {
             }
 
             if gif_data.is_empty() {
-                return Err(GpuWorkerError::InvalidInput("Empty file provided".to_string()));
+                return Err(GpuWorkerError::InvalidInput(
+                    "Empty file provided".to_string(),
+                ));
             }
 
             return Ok(gif_data);
         }
     }
 
-    Err(GpuWorkerError::InvalidInput("No file field found in multipart data".to_string()))
+    Err(GpuWorkerError::InvalidInput(
+        "No file field found in multipart data".to_string(),
+    ))
 }
 
 /// Processes a GIF by mirroring each frame vertically
-async fn process_gif_mirror(gif_data: &[u8], mirror_processor: &MirrorProcessor) -> Result<Vec<u8>> {
+async fn process_gif_mirror(
+    gif_data: &[u8],
+    mirror_processor: &MirrorProcessor,
+) -> Result<Vec<u8>> {
     let (frames, width, height) = decode_gif(gif_data)?;
     encode_mirrored_gif(frames, width, height, mirror_processor).await
 }
@@ -65,10 +72,17 @@ fn decode_gif(gif_data: &[u8]) -> Result<(Vec<gif::Frame<'static>>, u32, u32)> {
     }
 
     if frames.is_empty() {
-        return Err(GpuWorkerError::InvalidInput("GIF contains no frames".to_string()));
+        return Err(GpuWorkerError::InvalidInput(
+            "GIF contains no frames".to_string(),
+        ));
     }
 
-    log::info!("Decoded {} frames from GIF ({}x{})", frames.len(), width, height);
+    log::info!(
+        "Decoded {} frames from GIF ({}x{})",
+        frames.len(),
+        width,
+        height
+    );
     Ok((frames, width, height))
 }
 
@@ -87,8 +101,11 @@ async fn encode_mirrored_gif(
         log::info!("Processing frame {}/{}", index + 1, total_frames);
 
         let rgba_data = normalize_frame_to_rgba(&frame, width, height)?;
-        let mirrored_data = mirror_processor.mirror_vertically(&rgba_data, width, height).await?;
-        let mirrored_frame = create_mirrored_frame(&frame, &mirrored_data, width as u16, height as u16);
+        let mirrored_data = mirror_processor
+            .mirror_vertically(&rgba_data, width, height)
+            .await?;
+        let mirrored_frame =
+            create_mirrored_frame(&frame, &mirrored_data, width as u16, height as u16);
 
         encoder.write_frame(&mirrored_frame)?;
     }
@@ -98,7 +115,11 @@ async fn encode_mirrored_gif(
 }
 
 /// Creates a GIF encoder with proper settings
-fn create_gif_encoder(output: &mut Vec<u8>, width: u16, height: u16) -> Result<Encoder<&mut Vec<u8>>> {
+fn create_gif_encoder(
+    output: &mut Vec<u8>,
+    width: u16,
+    height: u16,
+) -> Result<Encoder<&mut Vec<u8>>> {
     let mut encoder = Encoder::new(output, width, height, &[])?;
     encoder.set_repeat(Repeat::Infinite)?;
     Ok(encoder)
@@ -120,10 +141,10 @@ fn normalize_frame_to_rgba(frame: &gif::Frame, width: u32, height: u32) -> Resul
             }
             Ok(rgba)
         }
-        len => Err(GpuWorkerError::InvalidInput(
-            format!("Unexpected frame buffer size: {} bytes (expected {} or {} bytes)",
-                    len, expected_rgba_len, expected_rgb_len)
-        )),
+        len => Err(GpuWorkerError::InvalidInput(format!(
+            "Unexpected frame buffer size: {} bytes (expected {} or {} bytes)",
+            len, expected_rgba_len, expected_rgb_len
+        ))),
     }
 }
 
@@ -142,7 +163,7 @@ fn create_mirrored_frame(
         .collect();
 
     let mut frame = Frame::from_rgb_speed(width, height, &rgb_data, 10);
-    
+
     // Preserve original frame properties
     frame.delay = original.delay;
     frame.dispose = original.dispose;
@@ -210,7 +231,10 @@ mod tests {
 
         let result = normalize_frame_to_rgba(&frame, 2, 2);
         assert!(result.is_err());
-        assert!(matches!(result.unwrap_err(), GpuWorkerError::InvalidInput(_)));
+        assert!(matches!(
+            result.unwrap_err(),
+            GpuWorkerError::InvalidInput(_)
+        ));
     }
 
     #[test]
@@ -229,7 +253,7 @@ mod tests {
         // Verify frame dimensions are correct
         assert_eq!(frame.width, 2);
         assert_eq!(frame.height, 1);
-        
+
         // Note: Frame::from_rgb_speed may create a palette-based frame
         // rather than storing raw RGB data, so we don't test the buffer contents
         // The important thing is that the frame is created successfully with correct dimensions
@@ -241,7 +265,7 @@ mod tests {
         let gif_data = vec![
             b'G', b'I', b'F', b'8', b'9', b'a', // Header
             1, 0, 1, 0, // Width: 1, Height: 1
-            0, 0, 0, // Global color table info
+            0, 0, 0,    // Global color table info
             0x3B, // Trailer
         ];
 
