@@ -28,10 +28,6 @@ actix-web = { version = "4.4" }
 actix-multipart = "0.6"
 bytes = "1.5"
 tokio-test = "0.4"
-criterion = { version = "0.5", features = ["html_reports"] }
+criterion = { version = "0.5", features = ["html_reports", "async"] }
 clap = { version = "4.4", features = ["derive"] }
 reqwest = { version = "0.11", features = ["multipart", "tokio-native-tls"] }
-
-[[bench]]
-name = "gif_processing"
-harness = false
