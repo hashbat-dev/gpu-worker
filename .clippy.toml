@@ -1,10 +1,9 @@
-warn-by-default = true
 msrv = "1.70.0"
 
 # Deny certain lints
 disallowed-methods = [
     { path = "std::env::set_var", reason = "Use a proper configuration system instead" },
-    { path = "std::env::remove_var", reason = "Use a proper configuration system instead" }
+    { path = "std::env::remove_var", reason = "Use a proper configuration system instead" },
 ]
 
 # Configure complexity thresholds
