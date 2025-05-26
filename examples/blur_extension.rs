@@ -1,6 +1,5 @@
 use image::{ImageBuffer, Rgba};
 use std::error::Error;
-use tokio;
 use transformations::BlurProcessor;
 
 async fn process_image(

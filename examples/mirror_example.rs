@@ -53,7 +53,7 @@ async fn main() -> Result<()> {
         anyhow::bail!("Input file does not exist: {:?}", args.input);
     }
 
-    if !args.input.extension().map_or(false, |ext| ext == "gif") {
+    if !args.input.extension().is_some_and(|ext| ext == "gif") {
         eprintln!("Warning: Input file does not have .gif extension");
     }
 

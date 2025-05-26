@@ -1,6 +1,7 @@
 use actix_web::{HttpResponse, ResponseError};
 use thiserror::Error;
 
+#[allow(dead_code)]
 #[derive(Debug, Error)]
 pub enum GpuWorkerError {
     #[error("GPU error: {0}")]
